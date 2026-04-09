@@ -41,7 +41,7 @@ function LockedCard() {
     );
   }
   
-  export default function ContinueLearningLockedSection() {
+  export default function ContinueLearningLockedSection(onOpenLogin) {
     return (
       <section className="mx-auto mt-[2.9%] w-[81.56%]">
         <div className="flex items-end justify-between">
@@ -72,7 +72,7 @@ function LockedCard() {
                 Sign in to track your learning progress
               </p>
   
-              <button className="mt-[5%] flex h-[2.5vw] w-[5vw] items-center justify-center rounded-[0.42vw] bg-[#4F46E5] text-[0.92vw] font-medium text-white hover:bg-[#4338ca]">
+              <button type="button" onClick={onOpenLogin} className="mt-[5%] flex h-[2.5vw] w-[5vw] items-center justify-center rounded-[0.42vw] bg-[#4F46E5] text-[0.92vw] font-medium text-white hover:bg-[#4338ca]">
                 Log In
               </button>
             </div>
