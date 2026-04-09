@@ -31,8 +31,8 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="mx-auto mt-[3.2%] w-[89.2%]">
-      <div className="relative overflow-hidden rounded-[1.6vw]">
+    <section className="mx-auto mt-[3.2%] w-[81.56%]">
+      <div className="relative overflow-hidden rounded-[1.9%]">
         <img src={slide.image} alt={slide.title} className="block w-full" />
 
         <div className="absolute bottom-[13.5%] left-1/2 flex -translate-x-1/2 items-center">

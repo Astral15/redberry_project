@@ -1,7 +1,7 @@
 export default function Navbar() {
   return (
-    <header className="border-b border-black/10 bg-[#f4f4f4]">
-      <div className="mx-auto flex w-[89.2%] items-center justify-between py-[1.4%]">
+    <header className="border-b border-black/10 bg-[#f4f4f4] py-[1.1%]">
+      <div className="mx-auto flex w-[81.56%] items-center justify-between py-[0.2%]">
         <a href="/" className="block w-[3.2%] min-w-[3.2rem]">
           <img src="/Logo.png" alt="Bootcamp logo" className="w-full" />
         </a>

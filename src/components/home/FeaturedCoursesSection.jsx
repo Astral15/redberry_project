@@ -17,19 +17,17 @@ function FeaturedCard() {
         Advanced React &amp; TypeScript Development
       </h3>
 
-      <p className="mt-[3%] text-[1vw] leading-[1.45] text-[#696969]">
+      <p className="mt-[3%] text-[1.10vw] leading-[1.45] text-[#696969]">
         Master modern React patterns, hooks, and TypeScript integration for building scalable web applications.
       </p>
 
       <div className="mt-[7%] flex items-end justify-between">
-        <div>
-          <p className="text-[0.7vw] text-[#9a9a9a]">Starting from</p>
-          <p className="mt-[4%] text-[2.3vw] font-semibold leading-none text-[#1d1d1d]">
-            $299
-          </p>
+        <div className="flex items-end gap-[0.45vw]">
+          <p className="mb-[0.65vw] text-[0.7vw] text-[#9a9a9a]">Starting from</p>
+          <p className="text-[2.3vw] font-semibold leading-none text-[#1d1d1d]">$299</p>
         </div>
 
-        <button className="rounded-[0.6vw] bg-[#4f46e5] px-[5.2%] py-[3.3%] text-[1vw] font-medium text-white hover:bg-[#4338ca]">
+        <button className="flex h-[3.02vw] w-[6.04vw] items-center justify-center rounded-[0.42vw] bg-[#4F46E5] text-[1vw] font-medium text-white hover:bg-[#4338ca]">
           Details
         </button>
       </div>
@@ -39,7 +37,7 @@ function FeaturedCard() {
 
 export default function FeaturedCoursesSection() {
   return (
-    <section className="mx-auto mt-[3.4%] w-[89.2%]">
+    <section className="mx-auto mt-[3.4%] w-[81.56%]">
       <div>
         <h2 className="text-[2.5vw] font-semibold leading-none text-[#111111]">
           Start Learning Today
@@ -49,7 +47,7 @@ export default function FeaturedCoursesSection() {
         </p>
       </div>
 
-      <div className="mt-[1.8%] grid grid-cols-3 gap-[1.5%]">
+      <div className="mt-[1.8%] grid grid-cols-3 gap-[2.04%]">
         {featuredCourses.map((item) => (
           <FeaturedCard key={item} />
         ))}
