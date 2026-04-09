@@ -17,11 +17,11 @@ function FeaturedCard() {
         Advanced React &amp; TypeScript Development
       </h3>
 
-      <p className="mt-[3%] text-[1.10vw] leading-[1.45] text-[#696969]">
-        Master modern React patterns, hooks, and TypeScript integration for building scalable web applications.
+<p className="mt-[3%] text-[1.10vw] leading-[1.45] text-[#696969]">
+  Master modern React patterns, hooks, and TypeScript integration for building scalable web applications.
       </p>
 
-      <div className="mt-[7%] flex items-end justify-between">
+      <div className="mt-[4%] flex items-end justify-between">
         <div className="flex items-end gap-[0.45vw]">
           <p className="mb-[0.65vw] text-[0.7vw] text-[#9a9a9a]">Starting from</p>
           <p className="text-[2.3vw] font-semibold leading-none text-[#1d1d1d]">$299</p>
