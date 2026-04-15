@@ -7,7 +7,7 @@ function getVisiblePages(currentPage, totalPages) {
     return [1, 2, 3, "...", totalPages];
   }
 
-  if (currentPage >= totalPages - 2) {
+  if (currentPage >= totalPages - 1) {
     return [1, "...", totalPages - 2, totalPages - 1, totalPages];
   }
 
