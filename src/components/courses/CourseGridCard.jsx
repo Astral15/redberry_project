@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
+
 export default function CourseGridCard({ course }) {
+  const navigate = useNavigate();
+  
   return (
     <article className="rounded-[0.9vw] bg-white p-[3.1%] shadow-[0_0.08vw_0.2vw_rgba(0,0,0,0.04)]">
       <img
@@ -42,6 +47,7 @@ export default function CourseGridCard({ course }) {
 
         <button
           type="button"
+          onClick={() => navigate("/course-details")}
           className="flex h-[2.95vw] w-[5.2vw] items-center justify-center rounded-[0.42vw] bg-[#4F46E5] text-[0.9vw] font-medium text-white hover:bg-[#4338ca]"
         >
           Details
