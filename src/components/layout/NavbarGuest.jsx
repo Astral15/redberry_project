@@ -8,7 +8,7 @@ export default function NavbarGuest({ onOpenLogin, onOpenSignUp }) {
   
           <nav className="flex items-center gap-[1vw] text-[1.08vw] text-[#3e3e3e]">
             <a
-              href="/courses"
+              href="/browse-courses"
               className="flex items-center gap-[0.45vw] text-[#3e3e3e] hover:text-[#4F46E5]"
             >
               <img src="/Sparkle.png" alt="" className="w-[1.1vw] min-w-[1rem]" />

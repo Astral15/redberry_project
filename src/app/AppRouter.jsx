@@ -29,6 +29,12 @@ export default function AppRouter() {
           path="/course-details-guest"
           element={<CourseDetailsPage isAuthenticated={false} mode="not_enrolled_guest" />}
         />
+
+<Route
+  path="/course-details-test"
+  element={<CourseDetailsPage isAuthenticated={true} mode="not_enrolled_authorized" />}
+/>
+
       </Routes>
     </BrowserRouter>
   );

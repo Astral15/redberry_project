@@ -1,6 +1,21 @@
+import { useState } from "react";
 import ModalShell from "../common/ModalShell";
 
-export default function ProfileModal({ onClose }) {
+export default function ProfileModal({ onClose, profileData, onSave }) {
+  const [formData, setFormData] = useState(profileData);
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
   return (
     <ModalShell
       onClose={onClose}
@@ -33,7 +48,7 @@ export default function ProfileModal({ onClose }) {
         </div>
       </div>
 
-      <form className="mt-[4.3%]">
+      <form className="mt-[4.3%]" onSubmit={handleSubmit}>
         <div>
           <label className="mb-[1.5%] block text-[0.98vw] font-medium text-[#3a3a3a]">
             Full Name
@@ -41,14 +56,16 @@ export default function ProfileModal({ onClose }) {
           <div className="relative">
             <input
               type="text"
+              value={formData.fullName}
+              onChange={(e) => handleChange("fullName", e.target.value)}
               placeholder="Username"
               className="h-[2.8vw] w-full rounded-[0.55vw] border border-[#bfbfbf] px-[3.5%] pr-[11%] text-[1vw] text-[#141414] outline-none placeholder:text-[#b1b1b1]"
             />
             <img
-  src="/PencilSimple.png"
-  alt="Edit"
-  className="absolute right-[4%] top-1/2 w-[1vw] -translate-y-1/2"
-/>
+              src="/PencilSimple.png"
+              alt="Edit"
+              className="absolute right-[4%] top-1/2 w-[1vw] -translate-y-1/2"
+            />
           </div>
         </div>
 
@@ -59,9 +76,9 @@ export default function ProfileModal({ onClose }) {
           <div className="relative">
             <input
               type="email"
-              placeholder="Email@gmail.com"
+              value={formData.email}
               disabled
-              className="h-[2.8vw] w-full rounded-[0.55vw] border border-[#bfbfbf] bg-white px-[3.5%] pr-[11%] text-[1vw] text-[#141414] outline-none placeholder:text-[#b1b1b1]"
+              className="h-[2.8vw] w-full rounded-[0.55vw] border border-[#bfbfbf] bg-white px-[3.5%] pr-[11%] text-[1vw] text-[#141414] outline-none"
             />
             <span className="absolute right-[4%] top-1/2 -translate-y-1/2 text-[1vw] text-[#b0b0b0]">
               ✓
@@ -77,6 +94,8 @@ export default function ProfileModal({ onClose }) {
             <div className="relative">
               <input
                 type="text"
+                value={formData.mobileNumber}
+                onChange={(e) => handleChange("mobileNumber", e.target.value)}
                 placeholder="+995 599209820"
                 className="h-[2.8vw] w-full rounded-[0.55vw] border border-[#bfbfbf] px-[3.5%] pr-[11%] text-[1vw] text-[#141414] outline-none placeholder:text-[#b1b1b1]"
               />
@@ -93,6 +112,8 @@ export default function ProfileModal({ onClose }) {
             <div className="relative">
               <input
                 type="text"
+                value={formData.age}
+                onChange={(e) => handleChange("age", e.target.value)}
                 placeholder="29"
                 className="h-[2.8vw] w-full rounded-[0.55vw] border border-[#bfbfbf] px-[18%] pr-[26%] text-[1vw] text-[#141414] outline-none placeholder:text-[#b1b1b1]"
               />
@@ -130,7 +151,7 @@ export default function ProfileModal({ onClose }) {
           type="submit"
           className="mt-[4.1%] flex h-[3vw] w-full items-center justify-center rounded-[0.55vw] bg-[#4F46E5] text-[1.08vw] font-medium text-white hover:bg-[#4338ca]"
         >
-          Update Profile
+          Save Profile
         </button>
       </form>
     </ModalShell>
