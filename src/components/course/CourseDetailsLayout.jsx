@@ -12,7 +12,7 @@ export default function CourseDetailsLayout({ isAuthenticated, mode }) {
         <span className="text-[#4F46E5]">Development</span>
       </div>
 
-      <div className="mt-[1.8%] flex items-start justify-between gap-[4%]">
+      <div className="mt-[1.8%] flex items-start justify-between gap-[3.2%]">
         <CourseMainInfo />
         <CourseStatusPanel isAuthenticated={isAuthenticated} mode={mode} />
       </div>

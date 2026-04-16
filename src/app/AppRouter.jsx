@@ -12,6 +12,7 @@ export default function AppRouter() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/courses" element={<CoursesPage isAuthenticated={true} />} />
         <Route path="/courses-guest" element={<CoursesPage isAuthenticated={false} />} />
+
         <Route
           path="/course-details"
           element={<CourseDetailsPage isAuthenticated={true} mode="enrolled" />}
