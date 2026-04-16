@@ -1,25 +1,32 @@
-function InfoList() {
+function InfoList({ enrollmentInfo }) {
+  const weeklySchedule = enrollmentInfo?.weeklySchedule || "Not selected";
+  const timeSlot = enrollmentInfo?.timeSlot || "Not selected";
+  const sessionType = enrollmentInfo?.sessionType || "Not selected";
+  const location = enrollmentInfo?.location || "";
+
   return (
     <div className="mt-[4.2%] space-y-[4.1%] text-[1vw] text-[#555555]">
       <div className="flex items-center gap-[0.55vw]">
         <img src="/calendar_days.png" alt="" className="w-[0.92vw]" />
-        <span>Monday-Wednesday</span>
+        <span>{weeklySchedule}</span>
       </div>
 
       <div className="flex items-center gap-[0.55vw]">
         <img src="/tabler_clock-hour.png" alt="" className="w-[0.92vw]" />
-        <span>Evening 6:00 PM - 8:00 PM</span>
+        <span>{timeSlot}</span>
       </div>
 
       <div className="flex items-center gap-[0.55vw]">
         <img src="/computer_icon.png" alt="" className="w-[0.92vw]" />
-        <span>Online</span>
+        <span>{sessionType}</span>
       </div>
 
-      <div className="flex items-center gap-[0.55vw]">
-        <img src="/location.png" alt="" className="w-[0.92vw]" />
-        <span>Tbilisi, Chavchavadze St.30</span>
-      </div>
+      {location && (
+        <div className="flex items-center gap-[0.55vw]">
+          <img src="/location.png" alt="" className="w-[0.92vw]" />
+          <span>{location}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -53,32 +60,36 @@ function ProgressBlock({ progress, buttonText, mode = "enrolled", onAction }) {
   );
 }
 
-function RatingBox() {
+function RatingBox({ rating, onChangeRating }) {
   return (
     <div className="mt-[5.2%] rounded-[0.65vw] bg-white px-[5%] py-[4.5%]">
-      <button
-        type="button"
-        className="ml-auto flex text-[0.95vw] text-[#b4b4b4]"
-      >
-        ×
-      </button>
+      <div className="ml-auto flex text-[0.95vw] text-[#b4b4b4]">×</div>
 
       <p className="mt-[0.5%] text-center text-[0.88vw] text-[#555555]">
         Rate your experience
       </p>
 
       <div className="mt-[4.6%] flex items-center justify-center gap-[0.55vw]">
-        <img src="/full_Star.png" alt="" className="w-[1.85vw]" />
-        <img src="/full_Star.png" alt="" className="w-[1.85vw]" />
-        <img src="/full_Star.png" alt="" className="w-[1.85vw]" />
-        <img src="/empty_Star.png" alt="" className="w-[1.85vw]" />
-        <img src="/empty_Star.png" alt="" className="w-[1.85vw]" />
+        {[1, 2, 3, 4, 5].map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => onChangeRating(item)}
+            className="flex items-center justify-center"
+          >
+            <img
+              src={item <= rating ? "/full_Star.png" : "/empty_Star.png"}
+              alt={`Rate ${item}`}
+              className="w-[1.85vw]"
+            />
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
-function NoticeBox({ title, text, buttonText }) {
+function NoticeBox({ title, text, buttonText, onClick }) {
   return (
     <div className="mt-[4.6%] flex items-center justify-between rounded-[0.65vw] border border-[#ececec] bg-white px-[4.2%] py-[3.6%]">
       <div className="max-w-[68%]">
@@ -97,6 +108,7 @@ function NoticeBox({ title, text, buttonText }) {
 
       <button
         type="button"
+        onClick={onClick}
         className="flex h-[2.4vw] min-w-[6.1vw] items-center justify-center rounded-[0.42vw] border border-[#B7B3F4] bg-white px-[0.62vw] text-[0.84vw] font-medium whitespace-nowrap text-[#4F46E5]"
       >
         {buttonText}
@@ -191,11 +203,7 @@ function TimeSlotButtons({
   );
 }
 
-function SessionTypeCard({
-  item,
-  selected,
-  onClick,
-}) {
+function SessionTypeCard({ item, selected, onClick }) {
   const disabled = item.seats === 0;
   const fewSeats = item.seats > 0 && item.seats < 5;
 
@@ -333,6 +341,8 @@ function ScheduleSelector({
   onSelectSessionType,
   onEnroll,
   isReadyToEnroll,
+  onOpenLogin,
+  onOpenProfile,
 }) {
   return (
     <div>
@@ -393,6 +403,7 @@ function ScheduleSelector({
           title="Authentication Required"
           text="You need sign in to your profile before enrolling in this course."
           buttonText="Sign In →"
+          onClick={onOpenLogin}
         />
       )}
 
@@ -401,6 +412,7 @@ function ScheduleSelector({
           title="Complete Your Profile"
           text="You need to fill in your profile details before enrolling in this course."
           buttonText="Complete"
+          onClick={onOpenProfile}
         />
       )}
     </div>
@@ -426,6 +438,13 @@ export default function CourseStatusPanel({
   onCompleteCourse,
   onRetakeCourse,
   isReadyToEnroll,
+  courseRating,
+  onChangeRating,
+  enrollmentInfo = null,
+  progress = 0,
+  incompleteProfile = false,
+  onOpenLogin,
+  onOpenProfile,
 }) {
   if (mode === "enrolled") {
     return (
@@ -434,9 +453,9 @@ export default function CourseStatusPanel({
           Enrolled
         </span>
 
-        <InfoList />
+        <InfoList enrollmentInfo={enrollmentInfo} />
         <ProgressBlock
-          progress={65}
+          progress={progress}
           buttonText="Complete Course"
           mode="enrolled"
           onAction={onCompleteCourse}
@@ -452,14 +471,14 @@ export default function CourseStatusPanel({
           Completed
         </span>
 
-        <InfoList />
+        <InfoList enrollmentInfo={enrollmentInfo} />
         <ProgressBlock
-          progress={100}
+          progress={progress}
           buttonText="Retake Course"
           mode="completed"
           onAction={onRetakeCourse}
         />
-        <RatingBox />
+        <RatingBox rating={courseRating} onChangeRating={onChangeRating} />
       </aside>
     );
   }
@@ -469,7 +488,7 @@ export default function CourseStatusPanel({
       <aside className="w-[33.9%] pt-[1.2%]">
         <ScheduleSelector
           guest={false}
-          incompleteProfile
+          incompleteProfile={incompleteProfile}
           basePrice={basePrice}
           totalPrice={totalPrice}
           sessionModifier={sessionModifier}
@@ -484,6 +503,8 @@ export default function CourseStatusPanel({
           onSelectSessionType={onSelectSessionType}
           onEnroll={onEnroll}
           isReadyToEnroll={isReadyToEnroll}
+          onOpenLogin={onOpenLogin}
+          onOpenProfile={onOpenProfile}
         />
       </aside>
     );
@@ -508,6 +529,8 @@ export default function CourseStatusPanel({
         onSelectSessionType={onSelectSessionType}
         onEnroll={onEnroll}
         isReadyToEnroll={isReadyToEnroll}
+        onOpenLogin={onOpenLogin}
+        onOpenProfile={onOpenProfile}
       />
     </aside>
   );

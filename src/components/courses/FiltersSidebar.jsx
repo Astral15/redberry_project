@@ -1,30 +1,5 @@
-const categories = [
-  { name: "Development", icon: "/Development.png" },
-  { name: "Design", icon: "/Design.png" },
-  { name: "Business", icon: "/Business.png" },
-  { name: "Data Science", icon: "/DataScience.png" },
-  { name: "Marketing", icon: "/Marketing.png" },
-];
-
-const topics = [
-  "React",
-  "TypeScript",
-  "Phyton",
-  "UX/UI",
-  "Figma",
-  "JavaScript",
-  "Node.js",
-  "Machine Learning",
-  "Seo",
-  "Analytics",
-];
-
-const instructors = [
-  "Marilyn Mango",
-  "Ryan Dorwart",
-  "Roger Calzoni",
-  "Zain Philips",
-];
+import { useEffect, useMemo, useState } from "react";
+import { filtersService } from "../../api/filters.service";
 
 function CategoryChip({ icon, children, selected, onClick }) {
   return (
@@ -37,7 +12,7 @@ function CategoryChip({ icon, children, selected, onClick }) {
           : "border-transparent bg-white text-[#666666] hover:border-[#cfcafc] hover:bg-[#f6f5ff] hover:text-[#4F46E5]"
       }`}
     >
-      <img src={icon} alt="" className="w-[0.82vw]" />
+      {icon ? <img src={icon} alt="" className="w-[0.82vw]" /> : null}
       <span>{children}</span>
     </button>
   );
@@ -80,6 +55,26 @@ function InstructorChip({ name, selected, onClick }) {
   );
 }
 
+function dedupeByIdOrName(items = []) {
+  const map = new Map();
+
+  items.forEach((item) => {
+    const id = item?.id ?? item?.value ?? null;
+    const name = item?.name ?? item?.title ?? item?.full_name ?? String(id ?? "");
+    const key = id ?? name.toLowerCase();
+
+    if (!map.has(key)) {
+      map.set(key, {
+        ...item,
+        normalizedId: id ?? name,
+        normalizedLabel: name,
+      });
+    }
+  });
+
+  return Array.from(map.values());
+}
+
 export default function FiltersSidebar({
   selectedCategories,
   setSelectedCategories,
@@ -88,6 +83,11 @@ export default function FiltersSidebar({
   selectedInstructors,
   setSelectedInstructors,
 }) {
+  const [categories, setCategories] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [instructors, setInstructors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const toggleItem = (value, selectedValues, setter) => {
     setter(
       selectedValues.includes(value)
@@ -102,12 +102,55 @@ export default function FiltersSidebar({
     setSelectedInstructors([]);
   };
 
+  useEffect(() => {
+    async function loadFilters() {
+      setIsLoading(true);
+
+      try {
+        const [categoriesData, topicsData, instructorsData] = await Promise.all([
+          filtersService.getCategories(),
+          filtersService.getTopics(),
+          filtersService.getInstructors(),
+        ]);
+
+        const rawCategories = Array.isArray(categoriesData)
+          ? categoriesData
+          : categoriesData?.data || [];
+
+        const rawTopics = Array.isArray(topicsData)
+          ? topicsData
+          : topicsData?.data || [];
+
+        const rawInstructors = Array.isArray(instructorsData)
+          ? instructorsData
+          : instructorsData?.data || [];
+
+        setCategories(dedupeByIdOrName(rawCategories));
+        setTopics(dedupeByIdOrName(rawTopics));
+        setInstructors(dedupeByIdOrName(rawInstructors));
+      } catch (error) {
+        console.error("Failed to load filters:", error);
+        setCategories([]);
+        setTopics([]);
+        setInstructors([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadFilters();
+  }, []);
+
   const activeFiltersCount =
     selectedCategories.length +
     selectedTopics.length +
     selectedInstructors.length;
 
   const hasActiveFilters = activeFiltersCount > 0;
+
+  const visibleCategories = useMemo(() => categories, [categories]);
+  const visibleTopics = useMemo(() => topics, [topics]);
+  const visibleInstructors = useMemo(() => instructors, [instructors]);
 
   return (
     <aside className="w-[19.73%] min-h-[47.6vw]">
@@ -133,18 +176,26 @@ export default function FiltersSidebar({
         <h3 className="text-[1vw] font-medium text-[#4a4a4a]">Categories</h3>
 
         <div className="mt-[5.2%] flex flex-wrap gap-[0.62vw]">
-          {categories.map((item) => (
-            <CategoryChip
-              key={item.name}
-              icon={item.icon}
-              selected={selectedCategories.includes(item.name)}
-              onClick={() =>
-                toggleItem(item.name, selectedCategories, setSelectedCategories)
-              }
-            >
-              {item.name}
-            </CategoryChip>
-          ))}
+          {isLoading ? (
+            <p className="text-[0.9vw] text-[#9a9a9a]">Loading...</p>
+          ) : (
+            visibleCategories.map((item) => (
+              <CategoryChip
+                key={String(item.normalizedId)}
+                icon={item.icon || null}
+                selected={selectedCategories.includes(item.normalizedId)}
+                onClick={() =>
+                  toggleItem(
+                    item.normalizedId,
+                    selectedCategories,
+                    setSelectedCategories
+                  )
+                }
+              >
+                {item.normalizedLabel}
+              </CategoryChip>
+            ))
+          )}
         </div>
       </div>
 
@@ -152,15 +203,21 @@ export default function FiltersSidebar({
         <h3 className="text-[1vw] font-medium text-[#4a4a4a]">Topics</h3>
 
         <div className="mt-[5.2%] flex flex-wrap gap-[0.62vw]">
-          {topics.map((item) => (
-            <TopicChip
-              key={item}
-              selected={selectedTopics.includes(item)}
-              onClick={() => toggleItem(item, selectedTopics, setSelectedTopics)}
-            >
-              {item}
-            </TopicChip>
-          ))}
+          {isLoading ? (
+            <p className="text-[0.9vw] text-[#9a9a9a]">Loading...</p>
+          ) : (
+            visibleTopics.map((item) => (
+              <TopicChip
+                key={String(item.normalizedId)}
+                selected={selectedTopics.includes(item.normalizedId)}
+                onClick={() =>
+                  toggleItem(item.normalizedId, selectedTopics, setSelectedTopics)
+                }
+              >
+                {item.normalizedLabel}
+              </TopicChip>
+            ))
+          )}
         </div>
       </div>
 
@@ -168,16 +225,24 @@ export default function FiltersSidebar({
         <h3 className="text-[1vw] font-medium text-[#4a4a4a]">Instructor</h3>
 
         <div className="mt-[5.2%] flex flex-col gap-[0.72vw]">
-          {instructors.map((item) => (
-            <InstructorChip
-              key={item}
-              name={item}
-              selected={selectedInstructors.includes(item)}
-              onClick={() =>
-                toggleItem(item, selectedInstructors, setSelectedInstructors)
-              }
-            />
-          ))}
+          {isLoading ? (
+            <p className="text-[0.9vw] text-[#9a9a9a]">Loading...</p>
+          ) : (
+            visibleInstructors.map((item) => (
+              <InstructorChip
+                key={String(item.normalizedId)}
+                name={item.normalizedLabel}
+                selected={selectedInstructors.includes(item.normalizedId)}
+                onClick={() =>
+                  toggleItem(
+                    item.normalizedId,
+                    selectedInstructors,
+                    setSelectedInstructors
+                  )
+                }
+              />
+            ))
+          )}
         </div>
       </div>
 

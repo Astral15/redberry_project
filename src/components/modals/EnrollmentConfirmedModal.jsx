@@ -1,6 +1,10 @@
 import ModalShell from "../common/ModalShell";
 
-export default function EnrollmentConfirmedModal({ onClose, onDone }) {
+export default function EnrollmentConfirmedModal({
+  onClose,
+  onDone,
+  courseTitle = "this course",
+}) {
   return (
     <ModalShell
       onClose={onClose}
@@ -21,9 +25,7 @@ export default function EnrollmentConfirmedModal({ onClose, onDone }) {
         <p className="mt-[5.2%] text-[1.02vw] leading-[1.35] text-[#5A5A5A]">
           You’ve successfully enrolled in
           <br />
-          “Advanced React &amp; TypeScript
-          <br />
-          Development” Course!
+          “{courseTitle}” Course!
         </p>
 
         <button

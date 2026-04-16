@@ -2,6 +2,7 @@ import CourseMainInfo from "./CourseMainInfo";
 import CourseStatusPanel from "./CourseStatusPanel";
 
 export default function CourseDetailsLayout({
+  course,
   isAuthenticated,
   mode,
   basePrice,
@@ -20,6 +21,8 @@ export default function CourseDetailsLayout({
   onCompleteCourse,
   onRetakeCourse,
   isReadyToEnroll,
+  courseRating,
+  onChangeRating,
 }) {
   return (
     <main className="mx-auto w-[81.56%] pt-[2.6%] pb-[7%]">
@@ -32,7 +35,7 @@ export default function CourseDetailsLayout({
       </div>
 
       <div className="mt-[1.8%] flex items-start justify-between gap-[3.2%]">
-        <CourseMainInfo />
+        <CourseMainInfo course={course} />
 
         <CourseStatusPanel
           isAuthenticated={isAuthenticated}
@@ -53,6 +56,8 @@ export default function CourseDetailsLayout({
           onCompleteCourse={onCompleteCourse}
           onRetakeCourse={onRetakeCourse}
           isReadyToEnroll={isReadyToEnroll}
+          courseRating={courseRating}
+          onChangeRating={onChangeRating}
         />
       </div>
     </main>

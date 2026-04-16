@@ -1,9 +1,12 @@
-import { useState } from "react";
 import ModalShell from "../common/ModalShell";
 
-export default function CongratulationsModal({ onClose, onDone }) {
-  const [rating, setRating] = useState(0);
-
+export default function CongratulationsModal({
+  onClose,
+  onDone,
+  rating,
+  onChangeRating,
+  courseTitle = "this course",
+}) {
   return (
     <ModalShell
       onClose={onClose}
@@ -18,9 +21,9 @@ export default function CongratulationsModal({ onClose, onDone }) {
         </h2>
 
         <p className="mt-[5.2%] text-[1.02vw] leading-[1.35] text-[#5A5A5A]">
-          You’ve completed “Advanced React
+          You’ve completed
           <br />
-          &amp; TypeScript Development” Course!
+          “{courseTitle}” Course!
         </p>
 
         <p className="mt-[6.5%] text-[0.98vw] font-medium text-[#6C63FF]">
@@ -32,7 +35,7 @@ export default function CongratulationsModal({ onClose, onDone }) {
             <button
               key={item}
               type="button"
-              onClick={() => setRating(item)}
+              onClick={() => onChangeRating(item)}
               className="flex items-center justify-center"
             >
               <img

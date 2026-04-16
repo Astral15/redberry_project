@@ -1,6 +1,12 @@
 import ModalShell from "../common/ModalShell";
 
-export default function EnrollmentConflictModal({ onClose, onContinue }) {
+export default function EnrollmentConflictModal({
+  onClose,
+  onContinue,
+  conflictCourseTitle = "another course",
+  conflictSchedule = "Selected schedule",
+  conflictTime = "Selected time",
+}) {
   return (
     <ModalShell
       onClose={onClose}
@@ -21,11 +27,11 @@ export default function EnrollmentConflictModal({ onClose, onContinue }) {
         <p className="mt-[5.2%] text-[1.02vw] leading-[1.35] text-[#5A5A5A]">
           You are already enrolled in
           <br />
-          “UX/UI Design Fundamentals” with
+          “{conflictCourseTitle}” with
           <br />
           the same schedule:
           <br />
-          Wed-Fri at 12AM-2PM
+          {conflictSchedule} at {conflictTime}
         </p>
 
         <div className="mt-[8.5%] flex w-full gap-[2.4%]">
