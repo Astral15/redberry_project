@@ -1,8 +1,23 @@
 function InfoList({ enrollmentInfo }) {
-  const weeklySchedule = enrollmentInfo?.weeklySchedule || "Not selected";
-  const timeSlot = enrollmentInfo?.timeSlot || "Not selected";
-  const sessionType = enrollmentInfo?.sessionType || "Not selected";
-  const location = enrollmentInfo?.location || "";
+  const weeklySchedule =
+    enrollmentInfo?.weeklySchedule ||
+    enrollmentInfo?.raw?.weeklySchedule ||
+    "Not selected";
+
+  const timeSlot =
+    enrollmentInfo?.timeSlot ||
+    enrollmentInfo?.raw?.timeSlot ||
+    "Not selected";
+
+  const sessionType =
+    enrollmentInfo?.sessionType ||
+    enrollmentInfo?.raw?.sessionType ||
+    "Not selected";
+
+  const location =
+    enrollmentInfo?.location ||
+    enrollmentInfo?.raw?.location ||
+    "";
 
   return (
     <div className="mt-[4.2%] space-y-[4.1%] text-[1vw] text-[#555555]">
@@ -21,12 +36,12 @@ function InfoList({ enrollmentInfo }) {
         <span>{sessionType}</span>
       </div>
 
-      {location && (
+      {location ? (
         <div className="flex items-center gap-[0.55vw]">
           <img src="/location.png" alt="" className="w-[0.92vw]" />
           <span>{location}</span>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -49,9 +64,11 @@ function ProgressBlock({ progress, buttonText, mode = "enrolled", onAction }) {
         className="mt-[5.2%] flex h-[2.4vw] w-full items-center justify-center gap-[0.32vw] rounded-[0.42vw] border border-[#4F46E5] bg-[#4F46E5] px-[0.62vw] text-[0.9vw] font-medium whitespace-nowrap text-white hover:bg-[#4338ca]"
       >
         <span>{buttonText}</span>
+
         {mode === "enrolled" && (
           <img src="/complete_icon.png" alt="" className="w-[0.9vw]" />
         )}
+
         {mode === "completed" && (
           <img src="/refresh_icon.png" alt="" className="w-[0.9vw]" />
         )}
@@ -62,28 +79,26 @@ function ProgressBlock({ progress, buttonText, mode = "enrolled", onAction }) {
 
 function RatingBox({ rating, onChangeRating }) {
   return (
-    <div className="mt-[5.2%] rounded-[0.65vw] bg-white px-[5%] py-[4.5%]">
-      <div className="ml-auto flex text-[0.95vw] text-[#b4b4b4]">×</div>
+    <div className="mt-[5.2%] rounded-[0.65vw] bg-white px-[5%] py-[4.5%] shadow-[0_0.08vw_0.2vw_rgba(0,0,0,0.03)]">
+      <div className="text-center">
+        <p className="text-[0.88vw] text-[#555555]">Rate your experience</p>
 
-      <p className="mt-[0.5%] text-center text-[0.88vw] text-[#555555]">
-        Rate your experience
-      </p>
-
-      <div className="mt-[4.6%] flex items-center justify-center gap-[0.55vw]">
-        {[1, 2, 3, 4, 5].map((item) => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => onChangeRating(item)}
-            className="flex items-center justify-center"
-          >
-            <img
-              src={item <= rating ? "/full_Star.png" : "/empty_Star.png"}
-              alt={`Rate ${item}`}
-              className="w-[1.85vw]"
-            />
-          </button>
-        ))}
+        <div className="mt-[4.6%] flex items-center justify-center gap-[0.55vw]">
+          {[1, 2, 3, 4, 5].map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => onChangeRating(item)}
+              className="flex items-center justify-center"
+            >
+              <img
+                src={item <= rating ? "/full_Star.png" : "/empty_Star.png"}
+                alt={`Rate ${item}`}
+                className="w-[1.85vw]"
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -223,7 +238,9 @@ function SessionTypeCard({ item, selected, onClick }) {
         <div className="flex items-center gap-[0.55vw]">
           <img src={item.icon} alt="" className="w-[1.35vw]" />
           <div>
-            <p className="text-[1vw] font-medium text-[#292929]">{item.label}</p>
+            <p className="text-[1vw] font-medium text-[#292929]">
+              {item.label}
+            </p>
             <p className="mt-[0.2vw] text-[0.8vw] text-[#777777]">
               {item.modifier === 0 ? "Included" : `+$${item.modifier}`}
             </p>
@@ -287,7 +304,7 @@ function PriceSummary({
   isReadyToEnroll,
 }) {
   return (
-    <div className="mt-[5.5%] rounded-[0.65vw] bg-white px-[5%] py-[5%]">
+    <div className="mt-[5.5%] rounded-[0.65vw] bg-white px-[5%] py-[5%] shadow-[0_0.08vw_0.2vw_rgba(0,0,0,0.03)]">
       <div className="flex items-center justify-between">
         <p className="pt-[0.15vw] text-[0.98vw] text-[#888888]">Total Price</p>
         <p className="text-[1.92vw] font-semibold leading-[1] text-[#2a2a2a]">

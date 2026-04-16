@@ -5,8 +5,10 @@ import Pagination from "./Pagination";
 import { coursesService } from "../../api/courses.service";
 
 function normalizeCourse(course) {
-  const categoryId = course?.category?.id ?? course?.category_id ?? course?.categoryId ?? null;
-  const topicId = course?.topic?.id ?? course?.topic_id ?? course?.topicId ?? null;
+  const categoryId =
+    course?.category?.id ?? course?.category_id ?? course?.categoryId ?? null;
+  const topicId =
+    course?.topic?.id ?? course?.topic_id ?? course?.topicId ?? null;
   const instructorId =
     course?.instructor?.id ?? course?.instructor_id ?? course?.instructorId ?? null;
 
@@ -58,9 +60,26 @@ export default function CoursesGrid({
       setLoadError("");
 
       try {
-        const data = await coursesService.getCourses();
-        const list = Array.isArray(data) ? data : data?.data || [];
-        setCourses(list.map(normalizeCourse));
+        const allCourses = [];
+        let page = 1;
+        let keepLoading = true;
+
+        while (keepLoading && allCourses.length < 90) {
+          const data = await coursesService.getCourses({ page });
+
+          const list = Array.isArray(data) ? data : data?.data || [];
+          const normalized = list.map(normalizeCourse);
+
+          allCourses.push(...normalized);
+
+          if (list.length === 0 || list.length < 10) {
+            keepLoading = false;
+          } else {
+            page += 1;
+          }
+        }
+
+        setCourses(allCourses.slice(0, 90));
       } catch (error) {
         console.error("Failed to load courses:", error);
         setLoadError(error?.data?.message || error?.message || "Failed to load courses");
@@ -77,10 +96,7 @@ export default function CoursesGrid({
     return courses.filter((course) => {
       const categoryMatch = matchesSelected(selectedCategories, course.categoryId);
       const topicMatch = matchesSelected(selectedTopics, course.topicId);
-      const instructorMatch = matchesSelected(
-        selectedInstructors,
-        course.instructorId
-      );
+      const instructorMatch = matchesSelected(selectedInstructors, course.instructorId);
 
       return categoryMatch && topicMatch && instructorMatch;
     });

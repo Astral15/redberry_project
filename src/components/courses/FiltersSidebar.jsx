@@ -55,19 +55,36 @@ function InstructorChip({ name, selected, onClick }) {
   );
 }
 
+function getCategoryIcon(name) {
+  const normalized = String(name || "").toLowerCase();
+
+  if (normalized.includes("development")) return "/Development.png";
+  if (normalized.includes("design")) return "/Design.png";
+  if (normalized.includes("business")) return "/Business.png";
+  if (normalized.includes("marketing")) return "/Marketing.png";
+  if (normalized.includes("data")) return "/DataScience.png";
+
+  return null;
+}
+
 function dedupeByIdOrName(items = []) {
   const map = new Map();
 
   items.forEach((item) => {
     const id = item?.id ?? item?.value ?? null;
-    const name = item?.name ?? item?.title ?? item?.full_name ?? String(id ?? "");
-    const key = id ?? name.toLowerCase();
+    const label =
+      item?.name ??
+      item?.title ??
+      item?.full_name ??
+      String(id ?? "");
+
+    const key = id ?? label.toLowerCase();
 
     if (!map.has(key)) {
       map.set(key, {
         ...item,
-        normalizedId: id ?? name,
-        normalizedLabel: name,
+        normalizedId: id ?? label,
+        normalizedLabel: label,
       });
     }
   });
@@ -182,7 +199,7 @@ export default function FiltersSidebar({
             visibleCategories.map((item) => (
               <CategoryChip
                 key={String(item.normalizedId)}
-                icon={item.icon || null}
+                icon={getCategoryIcon(item.normalizedLabel)}
                 selected={selectedCategories.includes(item.normalizedId)}
                 onClick={() =>
                   toggleItem(
