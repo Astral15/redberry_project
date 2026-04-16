@@ -10,8 +10,8 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<DashboardGuestPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/courses" element={<CoursesPage isAuthenticated={true} />} />
-        <Route path="/courses-guest" element={<CoursesPage isAuthenticated={false} />} />
+        <Route path="/browse-courses" element={<CoursesPage isAuthenticated={true} />} />
+        <Route path="/browse-courses-guest" element={<CoursesPage isAuthenticated={false} />} />
 
         <Route
           path="/course-details"
